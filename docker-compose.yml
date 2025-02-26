@@ -4,7 +4,7 @@ services:
   web:
     build: .
     ports:
-      - "80:80"
+      - "5050:5050"
     environment:
       - DATABASE_URL=mysql+pymysql://user:password@db/deinedb
       - SECRET_KEY=dein-geheimer-schlüssel
