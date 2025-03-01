@@ -6,7 +6,7 @@ services:
     ports:
       - "5050:5050"
     environment:
-      - DATABASE_URL=mysql+pymysql://user:password@db/deinedb
+      - DATABASE_URL=mysql+pymysql://bakulaai:bakulaai@192.168.2.249/bakulaai
       - SECRET_KEY=dein-geheimer-schlüssel
     depends_on:
       - db
