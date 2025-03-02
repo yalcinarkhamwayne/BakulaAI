@@ -12,4 +12,4 @@ services:
 
 networks:
   mynetwork:
-    driver: bridge
+    driver: eth1

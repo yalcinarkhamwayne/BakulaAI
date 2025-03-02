@@ -69,11 +69,18 @@ def create_app():
     @app.route('/protocols_overview')
     @login_required
     def protocols_overview():
-        # Alle Chiffren mit den letzten Protokollen gruppiert nach Chiffre
-        protocols = db.session.query(Protocol.chiffre, db.func.max(Protocol.timestamp).label('latest_timestamp')).group_by(Protocol.chiffre).all()
+        # Holen der Chiffren und deren neuestem Protokoll (timestamp)
+        protocols = db.session.query(
+            Protocol.chiffre, 
+            db.func.max(Protocol.timestamp).label('latest_timestamp')
+        ).group_by(Protocol.chiffre).all()
+
+        # Debugging: Ausgabe der Abfrageergebnisse
+        print(protocols)  # Ausgabe von [(chiffre, latest_timestamp), ...]
+        
         return render_template('protocols_overview.html', protocols=protocols)
 
-    
+  
     @app.route('/protocols/<string:chiffre>')
     @login_required
     def protocols_by_chiffre(chiffre):
@@ -102,6 +109,7 @@ def create_app():
     @login_required
     def protocols():
         query = Protocol.query
+        print("Protocol:", query)
 
         # Filter nach Datum
         date = request.args.get("date")

@@ -14,12 +14,12 @@
         </tr>
     </thead>
     <tbody>
-        {% for protocol in protocols %}
+        {% for chiffre, latest_timestamp in protocols %}
         <tr>
-            <td>{{ protocol.chiffre }}</td>
-            <td>{{ protocol.latest_timestamp.strftime('%d.%m.%Y %H:%M') }}</td>
+            <td>{{ chiffre }}</td>
+            <td>{{ latest_timestamp.strftime('%d.%m.%Y %H:%M') if latest_timestamp else 'Kein Eintrag' }}</td>
             <td>
-                <a href="{{ url_for('protocols_by_chiffre', chiffre=protocol.chiffre) }}" class="btn btn-info">Alle Protokolle</a>
+                <a href="{{ url_for('protocols_by_chiffre', chiffre=chiffre) }}" class="btn btn-info">Alle Protokolle</a>
             </td>
         </tr>
         {% endfor %}
