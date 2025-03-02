@@ -4,10 +4,9 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from config import Config
 from forms import LoginForm, RegisterForm, ProtocolForm
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db, User, Protocol  # Importiere db und Modelle aus models.py
-
+from models import User, Protocol  # Importiere db und Modelle aus models.py
+from database import db
 # Initialisiere SQLAlchemy und LoginManager
-db = SQLAlchemy()
 login_manager = LoginManager()
 
 def create_app():
