@@ -1,29 +1,10 @@
-<form method="GET" action="{{ url_for('protocols') }}" class="mb-3">
-  <div class="row">
-      <div class="col-md-4">
-          <label for="date">Datum:</label>
-          <input type="date" class="form-control" name="date" value="{{ request.args.get('date', '') }}">
-      </div>
-      <div class="col-md-4">
-          <label for="chiffre">Chiffre:</label>
-          <input type="text" class="form-control" name="chiffre" placeholder="Chiffre" value="{{ request.args.get('chiffre', '') }}">
-      </div>
-      <div class="col-md-4">
-          <label for="stimmung">Stimmung:</label>
-          <select class="form-control" name="stimmung">
-              <option value="">Alle</option>
-              <option value="1" {% if request.args.get('stimmung') == "1" %}selected{% endif %}>1 - Schlecht</option>
-              <option value="2" {% if request.args.get('stimmung') == "2" %}selected{% endif %}>2</option>
-              <option value="3" {% if request.args.get('stimmung') == "3" %}selected{% endif %}>3</option>
-              <option value="4" {% if request.args.get('stimmung') == "4" %}selected{% endif %}>4</option>
-              <option value="5" {% if request.args.get('stimmung') == "5" %}selected{% endif %}>5 - Sehr gut</option>
-          </select>
-      </div>
-  </div>
-  <button type="submit" class="btn btn-primary mt-3">Filtern</button>
-</form>
+{% extends "base.html" %}
 
-<table class="table">
+{% block title %}Protokolle - BakulaAI{% endblock %}
+
+{% block content %}
+<h2>Protokollübersicht</h2>
+<table class="table table-striped table-hover table-dark">
     <thead>
         <tr>
             <th>Datum</th>
@@ -35,7 +16,7 @@
     <tbody>
         {% for protocol in protocols %}
         <tr>
-            <td>{{ protocol.timestamp.strftime('%Y-%m-%d') }}</td>
+            <td>{{ protocol.timestamp.strftime('%d.%m.%Y %H:%M') }}</td>
             <td>{{ protocol.chiffre }}</td>
             <td>{{ protocol.stimmung }}</td>
             <td>{{ protocol.bemerkungen }}</td>
@@ -43,3 +24,4 @@
         {% endfor %}
     </tbody>
 </table>
+{% endblock %}

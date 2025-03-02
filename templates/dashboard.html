@@ -1,6 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Dashboard{% endblock %}
+
+{% block title %}Dashboard - BakulaAI{% endblock %}
+
 {% block content %}
-<h1>Willkommen, {{ current_user.username }}!</h1>
-<p>Wähle eine Aktion aus der Navigation oben.</p>
+<h2>Willkommen, {{ current_user.username }}!</h2>
+<p>Hier kannst du deine Protokolle verwalten.</p>
+<a href="{{ url_for('new_protocol') }}" class="btn btn-primary">Neues Protokoll hinzufügen</a>
+<a href="{{ url_for('protocols') }}" class="btn btn-secondary">Protokolle anzeigen</a>
 {% endblock %}

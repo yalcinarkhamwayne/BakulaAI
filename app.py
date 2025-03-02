@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash
+from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from config import Config
@@ -6,6 +6,8 @@ from forms import LoginForm, RegisterForm, ProtocolForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import User, Protocol  # Importiere db und Modelle aus models.py
 from database import db
+
+
 # Initialisiere SQLAlchemy und LoginManager
 login_manager = LoginManager()
 
