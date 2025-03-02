@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Neues Protokoll{% endblock %}
+{% block content %}
+<h2>Neues Protokoll erstellen</h2>
+<form method="post">
+  {{ form.hidden_tag() }}
+  <div class="mb-3">
+    {{ form.chiffre.label(class="form-label") }}
+    {{ form.chiffre(class="form-control") }}
+  </div>
+  <div class="mb-3">
+    {{ form.stimmung.label(class="form-label") }}
+    {{ form.stimmung(class="form-select") }}
+  </div>
+  <div class="mb-3">
+    {{ form.bemerkungen.label(class="form-label") }}
+    {{ form.bemerkungen(class="form-control", rows="10") }}
+  </div>
+  <div class="mb-3">
+    {{ form.submit(class="btn btn-primary") }}
+  </div>
+</form>
+{% endblock %}

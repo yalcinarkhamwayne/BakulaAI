@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Protokolle Übersicht{% endblock %}
+{% block content %}
+<h2>Protokolle Übersicht</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Chiffre</th>
+      <th>Stimmung</th>
+      <th>Bemerkungen</th>
+      <th>Datum</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for protocol in protocols %}
+    <tr>
+      <td>{{ protocol.id }}</td>
+      <td>{{ protocol.chiffre }}</td>
+      <td>{{ protocol.stimmung }}</td>
+      <td>{{ protocol.bemerkungen }}</td>
+      <td>{{ protocol.timestamp.strftime("%d.%m.%Y %H:%M") }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
