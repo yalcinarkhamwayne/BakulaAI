@@ -22,10 +22,7 @@ def create_app():
 
     # Setze die Login-Route für nicht authentifizierte Benutzer
     login_manager.login_view = "login"  # Hier wird der Name der Login-Route festgelegt
-    
-    from models.user import User  # Importiere die User-Klasse aus dem models/user.py
-    from models.protocol import Protocol  # Importiere die Protocol-Klasse aus dem models/protocol.py
-    
+
     # Benutzer-Loader für Flask-Login
     @login_manager.user_loader
     def load_user(user_id):
@@ -97,6 +94,9 @@ def create_app():
         logout_user()
         return redirect(url_for('login'))
 
+    from models.user import User  # Importiere die User-Klasse aus dem models/user.py
+    from models.protocol import Protocol  # Importiere die Protocol-Klasse aus dem models/protocol.py
+    
     return app
 
 app = create_app()
