@@ -1,29 +1,35 @@
 {% extends "base.html" %}
 
-{% block title %}Protokollübersicht - BakulaAI{% endblock %}
-
 {% block content %}
-<h2 class="text-center mb-4">Übersicht nach Chiffre</h2>
-
-<table class="table table-striped table-dark">
-    <thead>
-        <tr>
-            <th>Chiffre</th>
-            <th>Letztes Protokoll</th>
-            <th>Aktion</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for chiffre, latest_timestamp in protocols %}
-        <tr>
-            <td>{{ chiffre }}</td>
-            <td>{{ latest_timestamp.strftime('%d.%m.%Y %H:%M') if latest_timestamp else 'Kein Eintrag' }}</td>
-            <td>
-                <a href="{{ url_for('protocols_by_chiffre', chiffre=chiffre) }}" class="btn btn-info">Alle Protokolle</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
+<div class="container py-5">
+    <h1 class="text-center mb-4">Protokollübersicht</h1>
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Chiffre</th>
+                <th scope="col">Letztes Protokoll</th>
+                <th scope="col">Aktion</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for protocol in protocols %}
+                <tr>
+                    <td>{{ protocol.chiffre }}</td>
+                    <td>
+                        {% if protocol.latest_timestamp %}
+                            {% set timestamp = protocol.latest_timestamp | to_datetime %}
+                            {{ timestamp.strftime('%d.%m.%Y %H:%M') }}
+                        {% else %}
+                            Kein Eintrag
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('protocols_by_chiffre', chiffre=protocol.chiffre) }}" class="btn btn-info">Details</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('protocols') }}" class="btn btn-secondary">Protokolle anzeigen</a>
+</div>
 {% endblock %}

@@ -38,7 +38,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 {% if current_user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('protocols') }}">Protokolle</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('protocols_overview') }}">Protokolle</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('new_protocol') }}">Neues Protokoll</a></li>
                     <li class="nav-item"><a class="nav-link text-danger" href="{{ url_for('logout') }}">Logout</a></li>
                 {% else %}

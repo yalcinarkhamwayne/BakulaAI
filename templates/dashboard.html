@@ -6,5 +6,5 @@
 <h2>Willkommen, {{ current_user.username }}!</h2>
 <p>Hier kannst du deine Protokolle verwalten.</p>
 <a href="{{ url_for('new_protocol') }}" class="btn btn-primary">Neues Protokoll hinzufügen</a>
-<a href="{{ url_for('protocols') }}" class="btn btn-secondary">Protokolle anzeigen</a>
+<a href="{{ url_for('protocols_overview') }}" class="btn btn-secondary">Protokolle anzeigen</a>
 {% endblock %}

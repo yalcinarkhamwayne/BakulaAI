@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from config import Config
+from datetime import datetime
 from forms import LoginForm, RegisterForm, ProtocolForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import User, Protocol  # Importiere db und Modelle aus models.py
@@ -12,7 +12,10 @@ from database import db
 login_manager = LoginManager()
 
 def create_app():
+    
     app = Flask(__name__)
+    
+    #app.jinja_env.filters['to_datetime'] = datetime_filter
     
     # Konfiguration laden
     app.config.from_object(Config)
@@ -66,21 +69,22 @@ def create_app():
     def dashboard():
         return render_template('dashboard.html')
 
+    from sqlalchemy import cast, DateTime
+
     @app.route('/protocols_overview')
     @login_required
     def protocols_overview():
-        # Holen der Chiffren und deren neuestem Protokoll (timestamp)
-        protocols = db.session.query(
-            Protocol.chiffre, 
-            db.func.max(Protocol.timestamp).label('latest_timestamp')
-        ).group_by(Protocol.chiffre).all()
+        # Alle Chiffren mit den letzten Protokollen gruppiert nach Chiffre
+        protocols = db.session.query(Protocol.chiffre, 
+                                    db.func.max(cast(Protocol.timestamp, DateTime)).label('latest_timestamp'))\
+            .group_by(Protocol.chiffre).all()
 
-        # Debugging: Ausgabe der Abfrageergebnisse
-        print(protocols)  # Ausgabe von [(chiffre, latest_timestamp), ...]
-        
-        return render_template('protocols_overview.html', protocols=protocols)
+        # Protokolle in ein Dictionary umwandeln für die einfache Verwendung im Template
+        protocol_dict = [{'chiffre': chiffre, 'latest_timestamp': latest_timestamp} for chiffre, latest_timestamp in protocols]
 
-  
+        return render_template('protocols_overview.html', protocols=protocol_dict)
+
+
     @app.route('/protocols/<string:chiffre>')
     @login_required
     def protocols_by_chiffre(chiffre):
@@ -136,6 +140,19 @@ def create_app():
     def logout():
         logout_user()
         return redirect(url_for('login'))
+    
+    @app.template_filter('to_datetime')
+    def datetime_filter(value):
+        if isinstance(value, str):
+            try:
+                # Falls der Wert ein String ist, versuchen wir, ihn in ein datetime-Objekt zu parsen
+                return datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                return None  # Falls das Parsing fehlschlägt
+        elif isinstance(value, datetime):
+            # Falls der Wert bereits ein datetime-Objekt ist, einfach zurückgeben
+            return value
+        return None  # Falls der Wert None oder ein unbekannter Typ ist
     
     return app
 
