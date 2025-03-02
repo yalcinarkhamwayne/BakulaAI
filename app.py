@@ -84,8 +84,27 @@ def create_app():
     @app.route('/protocols')
     @login_required
     def protocols():
-        protocols = Protocol.query.order_by(Protocol.timestamp.desc()).all()
+        query = Protocol.query
+
+        # Filter nach Datum
+        date = request.args.get("date")
+        if date:
+            query = query.filter(db.func.date(Protocol.timestamp) == date)
+
+        # Filter nach Chiffre
+        chiffre = request.args.get("chiffre")
+        if chiffre:
+            query = query.filter(Protocol.chiffre.like(f"%{chiffre}%"))
+
+        # Filter nach Stimmung
+        stimmung = request.args.get("stimmung")
+        if stimmung:
+            query = query.filter(Protocol.stimmung == int(stimmung))
+
+        protocols = query.order_by(Protocol.timestamp.desc()).all()
+        
         return render_template('protocols_overview.html', protocols=protocols)
+
 
     @app.route('/logout')
     @login_required
