@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from app import db  # Importiere db aus app.py
+from app import db  # db wird jetzt korrekt importiert, weil die App bereits initialisiert ist
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)

@@ -5,34 +5,33 @@ from config import Config
 from forms.forms import LoginForm, RegisterForm, ProtocolForm
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# Initialisiere die Flask-App
+# Initialisiere die SQLAlchemy und LoginManager Instanzen
 db = SQLAlchemy()
 login_manager = LoginManager()
 
 def create_app():
-    # Erstelle die Flask-App
     app = Flask(__name__)
     
-    # Konfiguration aus der Config-Klasse laden
+    # Konfiguration laden
     app.config.from_object(Config)
-    
+
     # Initialisiere SQLAlchemy und LoginManager mit der App
     db.init_app(app)
     login_manager.init_app(app)
 
     # Setze die Login-Route für nicht authentifizierte Benutzer
-    login_manager.login_view = "login"  # Hier wird der Name der Login-Route festgelegt
+    login_manager.login_view = "login" 
 
     # Benutzer-Loader für Flask-Login
     @login_manager.user_loader
     def load_user(user_id):
-        from models.user import User  # Importiere die User-Klasse nach der Initialisierung von db
+        from models.user import User  # Importiere die User-Klasse nach der App-Initialisierung
         return User.query.get(int(user_id))
 
     # Importiere die Modelle nach der App-Initialisierung
-    # from models.user import User  # Importiere die User-Klasse
-    from models.protocol import Protocol  # Importiere die Protocol-Klasse
-    
+    from models.user import User  # Importiere User-Modell
+    from models.protocol import Protocol  # Importiere Protocol-Modell
+
     # Routen und Logik
     @app.route('/')
     def index():
@@ -42,16 +41,14 @@ def create_app():
     def login():
         form = LoginForm()
         if form.validate_on_submit():
-            # Versuche, den Benutzer aus der Datenbank zu finden
             user = User.query.filter_by(username=form.username.data).first()
             if user and user.check_password(form.password.data):
-                login_user(user)  # Login des Benutzers
+                login_user(user) 
                 flash("Erfolgreich eingeloggt", "success")
-                return redirect(url_for('dashboard'))  # Weiterleitung zur Dashboard-Seite
+                return redirect(url_for('dashboard'))
             else:
                 flash("Ungültiger Benutzername oder Passwort", "danger")
         return render_template('login.html', form=form)
-
 
     @app.route('/register', methods=['GET', 'POST'])
     def register():
@@ -101,8 +98,8 @@ def create_app():
     
     return app
 
+# Flask-App erstellen und starten
 app = create_app()
 
-# Flask-App erstellen und starten
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5050, debug=True)
