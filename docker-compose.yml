@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9.21"
 
 services:
   web:
@@ -7,7 +7,7 @@ services:
       - "5050:5050"
     environment:
       - DATABASE_URL=mysql+pymysql://bakulaai:bakulaai@192.168.2.249/bakulaai
-      - SECRET_KEY=dein-geheimer-schlüssel
+      - SECRET_KEY=e561527382e2bd259206eecc257c2d47
     depends_on:
       - db
 
