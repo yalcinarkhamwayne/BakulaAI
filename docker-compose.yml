@@ -1,10 +1,10 @@
 services:
   flaskapp:
     build: .
-    container_name: BakulaAi
+    container_name: BakulaAI
     restart: unless-stopped
     environment:
-      DATABASE_URL: mysql+pymysql://bakulaai:bakulaai@192.168.2.20/bakulaai
+      - DATABASE_URL=mysql+pymysql://bakulaai:bakulaai@192.168.2.20/bakulaai
     ports:
       - "5050:5050"
     networks:
