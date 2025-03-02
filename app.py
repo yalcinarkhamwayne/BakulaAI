@@ -65,6 +65,20 @@ def create_app():
     @login_required
     def dashboard():
         return render_template('dashboard.html')
+    
+    @app.route('/protocols_overview')
+    @login_required
+    def protocols_overview():
+        # Alle Chiffren mit den letzten Protokollen gruppiert nach Chiffre
+        protocols = db.session.query(Protocol.chiffre, db.func.max(Protocol.timestamp).label('latest_timestamp')).group_by(Protocol.chiffre).all()
+        return render_template('protocols_overview.html', protocols=protocols)
+    
+    @app.route('/protocols/<string:chiffre>')
+    @login_required
+    def protocols_by_chiffre(chiffre):
+        protocols = Protocol.query.filter_by(chiffre=chiffre).order_by(Protocol.timestamp.desc()).all()
+        return render_template('protocols_by_chiffre.html', protocols=protocols, chiffre=chiffre)
+
 
     @app.route('/protocol/new', methods=['GET', 'POST'])
     @login_required

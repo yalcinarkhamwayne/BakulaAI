@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Protokolle für Chiffre {{ chiffre }} - BakulaAI{% endblock %}
+
+{% block content %}
+<h2 class="text-center mb-4">Protokolle für Chiffre: {{ chiffre }}</h2>
+
+<table class="table table-striped table-dark">
+    <thead>
+        <tr>
+            <th>Datum</th>
+            <th>Stimmung</th>
+            <th>Bemerkungen</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for protocol in protocols %}
+        <tr>
+            <td>{{ protocol.timestamp.strftime('%d.%m.%Y %H:%M') }}</td>
+            <td>{{ protocol.stimmung }}</td>
+            <td>{{ protocol.bemerkungen }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('protocols_overview') }}" class="btn btn-secondary">Zurück zur Übersicht</a>
+
+{% endblock %}
