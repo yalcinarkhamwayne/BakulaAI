@@ -2,8 +2,9 @@ from flask import Flask, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from config import Config
-from forms.forms import LoginForm, RegisterForm, ProtocolForm
+from forms import LoginForm, RegisterForm, ProtocolForm
 from werkzeug.security import generate_password_hash, check_password_hash
+from models import db, User, Protocol  # Importiere db und Modelle aus models.py
 
 # Initialisiere SQLAlchemy und LoginManager
 db = SQLAlchemy()
@@ -21,16 +22,11 @@ def create_app():
 
     # Setze die Login-Route für nicht authentifizierte Benutzer
     login_manager.login_view = "login" 
-
+    
     # Benutzer-Loader für Flask-Login
     @login_manager.user_loader
     def load_user(user_id):
-        from models.user import User  # Importiere User-Klasse nach der App-Initialisierung
         return User.query.get(int(user_id))
-
-    # Importiere die Modelle nach der App-Initialisierung
-    from models.user import User  # Importiere User-Modell
-    from models.protocol import Protocol  # Importiere Protocol-Modell
 
     # Routen und Logik
     @app.route('/')
