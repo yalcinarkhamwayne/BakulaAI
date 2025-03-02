@@ -28,6 +28,10 @@ def create_app():
     def load_user(user_id):
         return User.query.get(int(user_id))
 
+    # Importiere die Modelle erst NACH der App-Initialisierung
+    from models.user import User  # Importiere die User-Klasse
+    from models.protocol import Protocol  # Importiere die Protocol-Klasse
+    
     # Routen und Logik
     @app.route('/')
     def index():
@@ -93,9 +97,6 @@ def create_app():
     def logout():
         logout_user()
         return redirect(url_for('login'))
-
-    from models.user import User  # Importiere die User-Klasse aus dem models/user.py
-    from models.protocol import Protocol  # Importiere die Protocol-Klasse aus dem models/protocol.py
     
     return app
 
