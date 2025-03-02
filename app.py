@@ -4,6 +4,8 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from config import Config
 from forms.forms import LoginForm, RegisterForm, ProtocolForm  # Importiere Formularklassen
 from werkzeug.security import generate_password_hash, check_password_hash
+from models.user import User  # Importiere die User-Klasse aus dem models/user.py
+from models.protocol import Protocol  # Importiere die Protocol-Klasse aus dem models/protocol.py
 
 # Initialisierung von SQLAlchemy und LoginManager
 db = SQLAlchemy()
