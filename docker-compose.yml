@@ -1,28 +1,15 @@
-version: "3.9.21"
-
 services:
-  web:
+  flaskapp:
     build: .
+    container_name: BakulaAi
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: mysql+pymysql://bakulaai:bakulaai@192.168.2.20/bakulaai
     ports:
       - "5050:5050"
-    environment:
-      - DATABASE_URL=mysql+pymysql://bakulaai:bakulaai@192.168.2.249/bakulaai
-      - SECRET_KEY=e561527382e2bd259206eecc257c2d47
-    depends_on:
-      - db
+    networks:
+      - mynetwork
 
-  db:
-    image: mariadb:latest
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: bakulaai
-      MYSQL_DATABASE: bakulaai
-      MYSQL_USER: bakulaai
-      MYSQL_PASSWORD: bakulaai
-    volumes:
-      - db_data:/var/lib/mysql
-    ports:
-      - "3307:3306"
-
-volumes:
-  db_data:
+networks:
+  mynetwork:
+    driver: bridge
