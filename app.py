@@ -5,13 +5,28 @@ from forms import LoginForm, RegisterForm, ProtocolForm
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
-app = Flask(__name__)
-app.config.from_object(Config)
+db = SQLAlchemy()
 
-db = SQLAlchemy(app)
+def create_app():
+    # Erstelle eine Flask App
+    app = Flask(__name__)
+    app.config.from_object(Config)  # Lädt die Konfiguration
+
+    # Initialisiere SQLAlchemy mit der App
+    db.init_app(app)
+
+    @app.route("/")
+    def index():
+        return "Datenbankverbindung aktiv!" if db else "Fehler in der DB-Verbindung!"
+
+    return app
+
+if __name__ == "__main__":
+    app = create_app()
+    app.run(host="0.0.0.0", port=5050, debug=True)
+
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -78,7 +93,6 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5050, debug=True)
+
 
  
