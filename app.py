@@ -36,8 +36,9 @@ def create_app():
     def login():
         form = LoginForm()
         if form.validate_on_submit():
+            print(f"Benutzername: {form.username.data}")
             user = User.query.filter_by(username=form.username.data).first()
-            
+            print(f"Gefundener Benutzer: {user}")
             if user and user.check_password(form.password.data):
                 login_user(user) 
                 flash("Erfolgreich eingeloggt", "success")
