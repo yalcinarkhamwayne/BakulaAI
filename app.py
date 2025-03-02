@@ -30,7 +30,7 @@ def create_app():
         return User.query.get(int(user_id))
 
     # Importiere die Modelle nach der App-Initialisierung
-    from models.user import User  # Importiere die User-Klasse
+    # from models.user import User  # Importiere die User-Klasse
     from models.protocol import Protocol  # Importiere die Protocol-Klasse
     
     # Routen und Logik
