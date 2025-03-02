@@ -2,14 +2,16 @@ from flask import Flask, render_template, redirect, url_for, flash
 from config import Config
 from models import db, User, Protocol
 from forms import LoginForm, RegisterForm, ProtocolForm
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
-db.init_app(app)
+db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -76,7 +78,7 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5050, debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5050, debug=True)
 
  
