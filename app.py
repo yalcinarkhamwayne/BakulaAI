@@ -20,6 +20,9 @@ def create_app():
     db.init_app(app)
     login_manager.init_app(app)
 
+    # Setze die Login-Route für nicht authentifizierte Benutzer
+    login_manager.login_view = "login"  # Hier wird der Name der Login-Route festgelegt
+    
     # Benutzer-Loader für Flask-Login
     @login_manager.user_loader
     def load_user(user_id):
@@ -34,12 +37,16 @@ def create_app():
     def login():
         form = LoginForm()
         if form.validate_on_submit():
+            # Versuche, den Benutzer aus der Datenbank zu finden
             user = User.query.filter_by(username=form.username.data).first()
             if user and user.check_password(form.password.data):
-                login_user(user)
-                return redirect(url_for('dashboard'))
-            flash("Ungültiger Benutzername oder Passwort")
+                login_user(user)  # Login des Benutzers
+                flash("Erfolgreich eingeloggt", "success")
+                return redirect(url_for('dashboard'))  # Weiterleitung zur Dashboard-Seite
+            else:
+                flash("Ungültiger Benutzername oder Passwort", "danger")
         return render_template('login.html', form=form)
+
 
     @app.route('/register', methods=['GET', 'POST'])
     def register():
