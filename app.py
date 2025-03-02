@@ -65,13 +65,14 @@ def create_app():
     @login_required
     def dashboard():
         return render_template('dashboard.html')
-    
+
     @app.route('/protocols_overview')
     @login_required
     def protocols_overview():
         # Alle Chiffren mit den letzten Protokollen gruppiert nach Chiffre
         protocols = db.session.query(Protocol.chiffre, db.func.max(Protocol.timestamp).label('latest_timestamp')).group_by(Protocol.chiffre).all()
         return render_template('protocols_overview.html', protocols=protocols)
+
     
     @app.route('/protocols/<string:chiffre>')
     @login_required
