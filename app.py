@@ -5,7 +5,7 @@ from config import Config
 from forms.forms import LoginForm, RegisterForm, ProtocolForm
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# Initialisiere die SQLAlchemy und LoginManager Instanzen
+# Initialisiere SQLAlchemy und LoginManager
 db = SQLAlchemy()
 login_manager = LoginManager()
 
@@ -16,7 +16,7 @@ def create_app():
     app.config.from_object(Config)
 
     # Initialisiere SQLAlchemy und LoginManager mit der App
-    db.init_app(app)
+    db.init_app(app)  # WICHTIG: db.init_app muss nach der App-Erstellung aufgerufen werden
     login_manager.init_app(app)
 
     # Setze die Login-Route für nicht authentifizierte Benutzer
@@ -25,7 +25,7 @@ def create_app():
     # Benutzer-Loader für Flask-Login
     @login_manager.user_loader
     def load_user(user_id):
-        from models.user import User  # Importiere die User-Klasse nach der App-Initialisierung
+        from models.user import User  # Importiere User-Klasse nach der App-Initialisierung
         return User.query.get(int(user_id))
 
     # Importiere die Modelle nach der App-Initialisierung
